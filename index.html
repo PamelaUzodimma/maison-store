@@ -38,11 +38,6 @@
     </script>
 
     <style>
-        /* Prevent font-awesome SVGs from absorbing pointer events on mobile touch */
-        svg, i {
-            pointer-events: none;
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 5px;
@@ -60,13 +55,19 @@
 
         /* Glassmorphism Elements */
         .glass-dark {
-            background: rgba(10, 10, 10, 0.85);
+            background: rgba(10, 10, 10, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(212, 175, 55, 0.15);
         }
+        .glass-light {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
 
-        /* Gold Gradient Effect */
+        /* Shimmer Gold Effect */
         .gold-gradient-text {
             background: linear-gradient(135deg, #FFF, #D4AF37, #AA7C11, #FFF);
             background-size: 200% auto;
@@ -81,6 +82,7 @@
             }
         }
 
+        /* Custom Hover Zoom Zoom Effect */
         .img-hover-zoom {
             overflow: hidden;
         }
@@ -91,6 +93,7 @@
             transform: scale(1.08);
         }
 
+        /* Gold Line Hover Animation */
         .hover-gold-line {
             position: relative;
         }
@@ -107,25 +110,29 @@
         .hover-gold-line:hover::after {
             width: 100%;
         }
+
+        /* Vignette overlay */
+        .vignette {
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body class="bg-obsidian text-ivory font-sans antialiased selection:bg-champagne selection:text-obsidian overflow-x-hidden">
 
     <!-- Top Announcement Bar -->
-    <div class="bg-slateGold text-champagneLight text-[10px] tracking-widest3x uppercase py-2 text-center border-b border-champagne/20 relative z-30">
+    <div class="bg-slateGold text-champagneLight text-[10px] tracking-widest3x uppercase py-2 text-center border-b border-champagne/20">
         Complimentary Worldwide White-Glove Delivery & Custom Atelier Fitting
     </div>
 
     <!-- Main Navigation Header -->
-    <header id="navbar" class="sticky top-0 left-0 w-full z-40 transition-all duration-300 py-3 px-4 md:px-12 glass-dark">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            
-            <!-- Mobile Menu Toggle Button -->
-            <button id="mobile-menu-btn" type="button" class="lg:hidden text-ivory hover:text-champagne p-2 focus:outline-none" aria-label="Toggle Navigation">
-                <i class="fa-solid fa-bars text-2xl"></i>
+    <header id="navbar" class="fixed top-8 left-0 w-full z-40 transition-all duration-500 py-4 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-dark rounded-full px-6 py-3">
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-ivory hover:text-champagne transition-colors" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars text-xl"></i>
             </button>
 
-            <!-- Navigation Links - Left (Desktop) -->
+            <!-- Navigation Links - Left -->
             <nav class="hidden lg:flex items-center space-x-8 text-xs tracking-widest2x uppercase">
                 <a href="#collections" class="hover-gold-line transition-colors hover:text-champagne py-1">Collections</a>
                 <a href="#editorial" class="hover-gold-line transition-colors hover:text-champagne py-1">Editorial</a>
@@ -134,18 +141,21 @@
             </nav>
 
             <!-- Brand Logo -->
-            <a href="#" class="text-center font-serif text-xl sm:text-2xl md:text-3xl tracking-widest uppercase font-extralight text-ivory group">
+            <a href="#" class="text-center font-serif text-2xl md:text-3xl tracking-widest uppercase font-extralight text-ivory group">
                 Maison <span class="text-champagne italic font-normal group-hover:gold-gradient-text transition-all">d'Élite</span>
             </a>
 
-            <!-- Right Utilities (Wishlist & Cart) -->
-            <div class="flex items-center space-x-4 sm:space-x-6 text-sm">
-                <button id="wishlist-btn" type="button" class="hover:text-champagne transition-colors relative p-2 focus:outline-none" title="Wishlist">
-                    <i class="fa-regular fa-heart text-lg"></i>
-                    <span id="wishlist-badge" class="hidden absolute top-0 right-0 bg-champagne text-obsidian text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+            <!-- Right Utilities (Search, Wishlist, Cart) -->
+            <div class="flex items-center space-x-6 text-sm">
+                <button id="search-btn" class="hover:text-champagne transition-colors hidden sm:block" title="Search Collections">
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-                <button id="bag-btn" type="button" class="hover:text-champagne transition-colors relative flex items-center gap-2 p-2 focus:outline-none" title="Shopping Bag">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <button id="wishlist-btn" class="hover:text-champagne transition-colors relative" title="Wishlist">
+                    <i class="fa-regular fa-heart"></i>
+                    <span id="wishlist-badge" class="hidden absolute -top-2 -right-2 bg-champagne text-obsidian text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                </button>
+                <button id="bag-btn" class="hover:text-champagne transition-colors relative flex items-center gap-2" title="Shopping Bag">
+                    <i class="fa-solid fa-bag-shopping"></i>
                     <span class="text-xs uppercase tracking-widest hidden md:inline">Bag</span>
                     <span id="cart-badge" class="bg-champagne text-obsidian text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
                 </button>
@@ -153,20 +163,20 @@
         </div>
     </header>
 
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobile-menu" class="fixed inset-0 bg-obsidian/95 backdrop-blur-xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between p-8">
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-obsidian/95 backdrop-blur-xl z-50 transform -translate-x-full transition-transform duration-500 ease-in-out flex flex-col justify-between p-8">
         <div>
             <div class="flex justify-between items-center mb-12">
-                <span class="font-serif text-2xl tracking-widest text-champagne">MAISON D'ÉLITE</span>
-                <button id="close-mobile-menu" type="button" class="text-2xl text-ivory hover:text-champagne p-2">
+                <span class="font-serif text-2xl tracking-widest">MAISON D'ÉLITE</span>
+                <button id="close-mobile-menu" class="text-2xl text-ivory hover:text-champagne">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-6 text-xl tracking-widest font-serif">
-                <a href="#collections" class="mobile-nav-link text-ivory hover:text-champagne transition-colors py-2">01. COLLECTIONS</a>
-                <a href="#editorial" class="mobile-nav-link text-ivory hover:text-champagne transition-colors py-2">02. EDITORIAL RUNWAY</a>
-                <a href="#atelier" class="mobile-nav-link text-ivory hover:text-champagne transition-colors py-2">03. PRIVATE ATELIER</a>
-                <a href="#heritage" class="mobile-nav-link text-ivory hover:text-champagne transition-colors py-2">04. HERITAGE & CRAFT</a>
+            <nav class="flex flex-col space-y-6 text-lg tracking-widest font-serif">
+                <a href="#collections" class="mobile-nav-link hover:text-champagne transition-colors">01. COLLECTIONS</a>
+                <a href="#editorial" class="mobile-nav-link hover:text-champagne transition-colors">02. EDITORIAL RUNWAY</a>
+                <a href="#atelier" class="mobile-nav-link hover:text-champagne transition-colors">03. PRIVATE ATELIER</a>
+                <a href="#heritage" class="mobile-nav-link hover:text-champagne transition-colors">04. HERITAGE & CRAFT</a>
             </nav>
         </div>
         <div class="border-t border-champagne/20 pt-6 text-xs text-stone-400 tracking-widest">
@@ -175,28 +185,29 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden py-16">
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
+    <section class="relative h-screen min-h-[700px] w-full flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105" 
              style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2000&auto=format&fit=crop');">
-            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-transparent"></div>
             <div class="absolute inset-0 bg-obsidian/30"></div>
         </div>
 
-        <div class="relative z-10 text-center max-w-4xl px-6">
-            <p class="text-xs md:text-sm uppercase tracking-widest3x text-champagne mb-4 font-medium">
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center max-w-4xl px-6 mt-16">
+            <p class="text-xs md:text-sm uppercase tracking-widest3x text-champagne mb-4 animate-fade-in font-medium">
                 Hiver 2026 / Haute Couture Collection
             </p>
             <h1 class="font-serif text-4xl sm:text-6xl md:text-8xl tracking-tight leading-none font-extralight mb-6">
                 ARCHITECTS OF <br>
                 <span class="italic font-normal text-champagne gold-gradient-text">ELEGANCE</span>
             </h1>
-            <p class="text-stone-300 font-serif text-base md:text-xl max-w-xl mx-auto italic font-light mb-8 opacity-90">
+            <p class="text-stone-300 font-serif text-lg md:text-xl max-w-xl mx-auto italic font-light mb-8 opacity-90">
                 "Pure structural poetry crafted by hand in our Paris atelier. Designed for the rare few who demand uncompromising perfection."
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#collections" class="w-full sm:w-auto px-8 py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-medium hover:bg-ivory transition-all duration-300 rounded-sm">
+                <a href="#collections" class="w-full sm:w-auto px-8 py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-medium hover:bg-ivory transition-all duration-300 shadow-lg shadow-champagne/10 rounded-sm">
                     Explore Collection
                 </a>
                 <a href="#atelier" class="w-full sm:w-auto px-8 py-4 border border-champagne/50 text-ivory text-xs tracking-widest2x uppercase font-medium hover:border-champagne hover:bg-champagne/10 transition-all duration-300 rounded-sm glass-dark">
@@ -204,11 +215,17 @@
                 </a>
             </div>
         </div>
+
+        <!-- Bottom Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center opacity-75 hover:opacity-100 transition-opacity">
+            <span class="text-[9px] tracking-widest3x uppercase text-stone-400 mb-2">Scroll</span>
+            <div class="w-[1px] h-10 bg-gradient-to-b from-champagne to-transparent animate-pulse"></div>
+        </div>
     </section>
 
-    <!-- Collections Lookbook -->
-    <section id="collections" class="py-20 px-4 md:px-12 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-champagne/15 pb-8">
+    <section id="collections" class="py-28 px-6 md:px-12 max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-champagne/15 pb-8">
             <div>
                 <span class="text-xs uppercase tracking-widest3x text-champagne">CURATED SELECTION</span>
                 <h2 class="font-serif text-3xl md:text-5xl font-light mt-2">The Collection Lookbook</h2>
@@ -218,69 +235,72 @@
             </p>
         </div>
 
-        <!-- Touch-Friendly Category Filter Pills -->
-        <div class="flex flex-wrap gap-2 md:gap-4 mb-12 justify-start md:justify-start overflow-x-auto pb-2">
-            <button type="button" class="filter-btn active px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-champagne bg-champagne text-obsidian transition-all whitespace-nowrap" data-category="all">
-                All
+        <!-- Collection Filters -->
+        <div class="flex flex-wrap gap-3 md:gap-6 mb-12 justify-center md:justify-start">
+            <button class="filter-btn active px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-champagne bg-champagne text-obsidian transition-all" data-category="all">
+                All Creations
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="couture">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="couture">
                 Haute Couture
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="rtw">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="rtw">
                 Ready-to-Wear
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="bags">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="bags">
                 Bags & Leather
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="jewelry">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="jewelry">
                 Jewelry
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="watches">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="watches">
                 Timepieces
             </button>
-            <button type="button" class="filter-btn px-4 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all whitespace-nowrap" data-category="footwear">
+            <button class="filter-btn px-5 py-2 text-xs uppercase tracking-widest rounded-full border border-stone-800 text-stone-300 hover:border-champagne transition-all" data-category="footwear">
                 Footwear
             </button>
         </div>
 
-        <!-- Products Grid -->
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-            <!-- Dynamic Cards Loaded via JS -->
+        <!-- Dynamic Collection Grid -->
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            <!-- Product items injected by JavaScript -->
         </div>
     </section>
 
-    <!-- Editorial Runway -->
-    <section id="editorial" class="py-20 bg-warmGrey border-y border-champagne/10 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 md:px-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <section id="editorial" class="py-24 bg-warmGrey border-y border-champagne/10 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
+                <!-- Editorial Image Display -->
                 <div class="lg:col-span-7 relative">
                     <div class="relative rounded-sm overflow-hidden border border-champagne/20 shadow-2xl img-hover-zoom">
                         <img id="runway-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop" 
-                             alt="Runway Show" class="w-full h-[400px] sm:h-[550px] object-cover transition-all duration-700">
+                             alt="Runway Show" class="w-full h-[550px] object-cover transition-all duration-700">
                         <div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent">
                             <span id="runway-tag" class="text-[10px] tracking-widest3x text-champagne uppercase font-medium">Paris Fashion Week 2026</span>
-                            <h3 id="runway-title" class="font-serif text-xl sm:text-2xl md:text-3xl font-light text-ivory mt-1">Look 04: The Nocturne Velvet Cape</h3>
+                            <h3 id="runway-title" class="font-serif text-2xl md:text-3xl font-light text-ivory mt-1">Look 04: The Nocturne Velvet Cape</h3>
                         </div>
                     </div>
                 </div>
 
+                <!-- Editorial Story Content -->
                 <div class="lg:col-span-5 flex flex-col justify-center">
                     <span class="text-xs uppercase tracking-widest3x text-champagne mb-3">EDITORIAL SHOWCASE</span>
-                    <h2 class="font-serif text-2xl md:text-4xl font-light mb-4 leading-tight">
+                    <h2 class="font-serif text-3xl md:text-4xl font-light mb-6 leading-tight">
                         "Shadows & Light in Perfect Symmetry"
                     </h2>
-                    <p class="text-stone-300 font-serif text-sm md:text-base leading-relaxed mb-6 italic">
-                        "In our Winter Haute Couture collection, Creative Director Hélène de Saint-Germain explores the subtle intersection of architectural minimalism and soft drape."
+                    <p class="text-stone-300 font-serif text-base leading-relaxed mb-6 italic">
+                        "In our Winter Haute Couture collection, Creative Director Hélène de Saint-Germain explores the subtle intersection of architectural minimalism and soft drape, utilizing hand-spun Mulberry silk and Japanese structured wool."
                     </p>
                     
-                    <div class="glass-dark p-5 rounded-sm border-l-2 border-champagne mb-6">
+                    <!-- Styling Notes Box -->
+                    <div class="glass-dark p-6 rounded-sm border-l-2 border-champagne mb-8">
                         <h4 class="text-xs uppercase tracking-widest text-champagne font-semibold mb-2">Atelier Styling Notes</h4>
                         <p id="runway-desc" class="text-stone-400 text-xs leading-relaxed">
                             Structured shoulder line paired with flowing train. Hand-embroidered with micro glass beads requiring 240 hours of artisanal labor in Paris.
                         </p>
                     </div>
 
+                    <!-- Slide Controls -->
                     <div class="flex items-center justify-between pt-4 border-t border-stone-800">
                         <div class="flex items-center space-x-2">
                             <span id="slide-current" class="text-champagne font-serif text-xl font-bold">01</span>
@@ -288,11 +308,11 @@
                             <span class="text-stone-500 font-serif text-sm">03</span>
                         </div>
                         <div class="flex space-x-4">
-                            <button id="prev-slide" type="button" class="w-12 h-12 rounded-full border border-champagne/30 flex items-center justify-center text-ivory hover:border-champagne hover:bg-champagne/10 transition-all">
-                                <i class="fa-solid fa-arrow-left text-sm"></i>
+                            <button id="prev-slide" class="w-12 h-12 rounded-full border border-champagne/30 flex items-center justify-center text-ivory hover:border-champagne hover:bg-champagne/10 transition-all">
+                                <i class="fa-solid fa-arrow-left text-xs"></i>
                             </button>
-                            <button id="next-slide" type="button" class="w-12 h-12 rounded-full border border-champagne/30 flex items-center justify-center text-ivory hover:border-champagne hover:bg-champagne/10 transition-all">
-                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            <button id="next-slide" class="w-12 h-12 rounded-full border border-champagne/30 flex items-center justify-center text-ivory hover:border-champagne hover:bg-champagne/10 transition-all">
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
                             </button>
                         </div>
                     </div>
@@ -302,27 +322,27 @@
         </div>
     </section>
 
-    <!-- Private Atelier Section -->
-    <section id="atelier" class="py-20 px-4 md:px-12 max-w-7xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-12">
+    <section id="atelier" class="py-28 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
             <span class="text-xs uppercase tracking-widest3x text-champagne">PRIVATE CLIENTELE SERVICES</span>
             <h2 class="font-serif text-3xl md:text-5xl font-light mt-2 mb-4">The Private Atelier Experience</h2>
-            <p class="text-stone-400 font-serif text-sm md:text-base italic">
+            <p class="text-stone-400 font-serif text-base italic">
                 Reserve a bespoke consultation with our Master Tailors and Stylists in Paris, New York, or directly at your private residence.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-warmGrey/60 rounded-xl p-6 md:p-10 border border-champagne/20">
-            <div class="lg:col-span-5 relative flex flex-col justify-between p-6 sm:p-8 rounded-lg bg-cover bg-center overflow-hidden min-h-[320px]"
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 bg-warmGrey/60 rounded-xl p-6 md:p-10 border border-champagne/20">
+            <!-- Left Info Banner -->
+            <div class="lg:col-span-5 relative flex flex-col justify-between p-8 rounded-lg bg-cover bg-center overflow-hidden min-h-[380px]"
                  style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1000&auto=format&fit=crop');">
-                <div class="absolute inset-0 bg-obsidian/80"></div>
+                <div class="absolute inset-0 bg-obsidian/75"></div>
                 
                 <div class="relative z-10">
                     <span class="text-[10px] tracking-widest3x text-champagne uppercase">WHITE-GLOVE SERVICE</span>
-                    <h3 class="font-serif text-xl sm:text-2xl text-ivory mt-2 font-light">Bespoke Fitting & Personal Shopping</h3>
+                    <h3 class="font-serif text-2xl text-ivory mt-2 font-light">Bespoke Fitting & Personal Shopping</h3>
                 </div>
 
-                <div class="relative z-10 space-y-3 text-xs text-stone-300">
+                <div class="relative z-10 space-y-4 text-xs text-stone-300">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-gem text-champagne"></i>
                         <span>Exclusive access to unpublished runway archives</span>
@@ -338,24 +358,25 @@
                 </div>
             </div>
 
+            <!-- Booking Form Container -->
             <div class="lg:col-span-7 flex flex-col justify-center">
-                <form id="atelier-form" class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form id="atelier-form" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Full Name *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Full Name *</label>
                             <input type="text" required placeholder="Lady / Lord / Mr. / Ms." 
                                    class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Email Address *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Email Address *</label>
                             <input type="email" required placeholder="vip@domain.com" 
                                    class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Preferred Location *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Preferred Location *</label>
                             <select required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                                 <option value="paris">Paris Flagship Salon (Place Vendôme)</option>
                                 <option value="ny">New York Private Suite (5th Ave)</option>
@@ -365,7 +386,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Service Required *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Service Required *</label>
                             <select required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                                 <option value="haute">Haute Couture Bespoke Fitting</option>
                                 <option value="bridal">Bridal & Evening Gown Consultation</option>
@@ -375,13 +396,13 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Preferred Date *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Preferred Date *</label>
                             <input type="date" required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Preferred Time *</label>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Preferred Time *</label>
                             <select required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                                 <option value="morning">Morning Appointment (10:00 AM)</option>
                                 <option value="afternoon">Afternoon Appointment (02:00 PM)</option>
@@ -391,8 +412,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Special Requests or Specific Looks</label>
-                        <textarea rows="2" placeholder="Specify any looks from current lookbook or custom preferences..." 
+                        <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Special Requests or Specific Looks</label>
+                        <textarea rows="3" placeholder="Specify any looks from current lookbook or custom preferences..." 
                                   class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors"></textarea>
                     </div>
 
@@ -404,29 +425,33 @@
         </div>
     </section>
 
-    <!-- Heritage & Savoir-Faire -->
-    <section id="heritage" class="py-20 bg-obsidian border-t border-champagne/10 relative">
-        <div class="max-w-7xl mx-auto px-4 md:px-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section id="heritage" class="py-24 bg-obsidian border-t border-champagne/10 relative">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                
                 <div>
                     <span class="text-xs uppercase tracking-widest3x text-champagne">HERITAGE & SAVOIR-FAIRE</span>
                     <h2 class="font-serif text-3xl md:text-5xl font-light mt-2 mb-6">A Century of Uncompromising Artistry</h2>
-                    <p class="text-stone-300 font-serif text-sm md:text-base leading-relaxed mb-6 italic">
+                    <p class="text-stone-300 font-serif text-base leading-relaxed mb-6 italic">
                         Founded in 1924 along Paris's iconic Rue du Faubourg Saint-Honoré, Maison d'Élite has preserved the rare artisanal techniques of French Haute Couture across generations.
                     </p>
+                    <p class="text-stone-400 text-xs leading-relaxed mb-8">
+                        Every single garment that bears the Maison d'Élite mark is constructed by hand by artisan tailors with decades of mastery. From hand-dyed Italian silks to conflict-free precious gemstones, our materials are sourced with rigorous ethical standards.
+                    </p>
 
-                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-stone-800">
+                    <!-- Key Brand Statistics Grid -->
+                    <div class="grid grid-cols-3 gap-6 pt-6 border-t border-stone-800">
                         <div>
-                            <span class="font-serif text-2xl md:text-3xl text-champagne font-light">100+</span>
-                            <p class="text-[9px] md:text-[10px] tracking-widest uppercase text-stone-400 mt-1">Years History</p>
+                            <span class="font-serif text-3xl text-champagne font-light">100+</span>
+                            <p class="text-[10px] tracking-widest uppercase text-stone-400 mt-1">Years of History</p>
                         </div>
                         <div>
-                            <span class="font-serif text-2xl md:text-3xl text-champagne font-light">180h</span>
-                            <p class="text-[9px] md:text-[10px] tracking-widest uppercase text-stone-400 mt-1">Avg. Hours/Piece</p>
+                            <span class="font-serif text-3xl text-champagne font-light">180h</span>
+                            <p class="text-[10px] tracking-widest uppercase text-stone-400 mt-1">Avg. Hours per Piece</p>
                         </div>
                         <div>
-                            <span class="font-serif text-2xl md:text-3xl text-champagne font-light">100%</span>
-                            <p class="text-[9px] md:text-[10px] tracking-widest uppercase text-stone-400 mt-1">Handmade</p>
+                            <span class="font-serif text-3xl text-champagne font-light">100%</span>
+                            <p class="text-[10px] tracking-widest uppercase text-stone-400 mt-1">Artisanal Handmade</p>
                         </div>
                     </div>
                 </div>
@@ -435,35 +460,66 @@
                     <div class="space-y-4">
                         <div class="img-hover-zoom rounded-sm overflow-hidden">
                             <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop" 
-                                 alt="Craftsmanship Atelier" class="w-full h-48 sm:h-64 object-cover">
+                                 alt="Craftsmanship Atelier" class="w-full h-64 object-cover">
+                        </div>
+                        <div class="img-hover-zoom rounded-sm overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=800&auto=format&fit=crop" 
+                                 alt="High Fashion Styling" class="w-full h-48 object-cover">
                         </div>
                     </div>
-                    <div class="space-y-4 pt-6">
+                    <div class="space-y-4 pt-8">
                         <div class="img-hover-zoom rounded-sm overflow-hidden">
                             <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop" 
-                                 alt="Fabrics & Textiles" class="w-full h-48 sm:h-64 object-cover">
+                                 alt="Fabrics & Textiles" class="w-full h-48 object-cover">
+                        </div>
+                        <div class="img-hover-zoom rounded-sm overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop" 
+                                 alt="Paris Runway Model" class="w-full h-64 object-cover">
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <section class="py-20 bg-warmGrey border-t border-champagne/15 text-center px-6">
+        <div class="max-w-xl mx-auto">
+            <i class="fa-solid fa-crown text-2xl text-champagne mb-4"></i>
+            <h3 class="font-serif text-2xl md:text-3xl font-light mb-3">Join The Gazette d'Élite</h3>
+            <p class="text-stone-400 font-serif text-sm italic mb-8">
+                Receive private invitations to private runway previews, salon trunk shows, and new collection launches.
+            </p>
+            
+            <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3">
+                <input type="email" required placeholder="Enter your private email address" 
+                       class="flex-1 bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
+                <button type="submit" class="px-8 py-3 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-medium hover:bg-ivory transition-colors">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+
     <footer class="bg-obsidian pt-16 pb-12 border-t border-stone-900 text-stone-400 text-xs">
-        <div class="max-w-7xl mx-auto px-4 md:px-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
                 <span class="font-serif text-xl tracking-widest text-ivory block mb-4">MAISON D'ÉLITE</span>
                 <p class="leading-relaxed mb-4 text-stone-500">
                     High Fashion & Haute Couture <br>
                     Paris • New York • London • Tokyo
                 </p>
+                <div class="flex space-x-4 text-stone-400">
+                    <a href="#" class="hover:text-champagne transition-colors"><i class="fa-brands fa-instagram text-base"></i></a>
+                    <a href="#" class="hover:text-champagne transition-colors"><i class="fa-brands fa-pinterest text-base"></i></a>
+                    <a href="#" class="hover:text-champagne transition-colors"><i class="fa-brands fa-youtube text-base"></i></a>
+                </div>
             </div>
 
             <div>
                 <h4 class="text-ivory uppercase tracking-widest text-[11px] font-semibold mb-4">Maison Flagships</h4>
                 <ul class="space-y-2 text-stone-500">
-                    <li>12 Place Vendôme, Paris</li>
+                    <li>12 Place Vendôme, 75001 Paris</li>
                     <li>740 Madison Avenue, New York</li>
                     <li>14 New Bond Street, London</li>
                     <li>5-7-1 Ginza, Chuo-ku, Tokyo</li>
@@ -475,51 +531,59 @@
                 <ul class="space-y-2">
                     <li><a href="#atelier" class="hover:text-champagne transition-colors">Book Private Appointment</a></li>
                     <li><a href="#" class="hover:text-champagne transition-colors">White-Glove Shipping</a></li>
-                    <li><a href="#" class="hover:text-champagne transition-colors">Returns & Authenticity</a></li>
+                    <li><a href="#" class="hover:text-champagne transition-colors">Returns & Authenticity Care</a></li>
+                    <li><a href="#" class="hover:text-champagne transition-colors">Haute Couture Alterations</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-ivory uppercase tracking-widest text-[11px] font-semibold mb-4">Legal</h4>
+                <h4 class="text-ivory uppercase tracking-widest text-[11px] font-semibold mb-4">Legal & Privacy</h4>
                 <ul class="space-y-2 text-stone-500">
                     <li><a href="#" class="hover:text-champagne transition-colors">Terms of Service</a></li>
                     <li><a href="#" class="hover:text-champagne transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-champagne transition-colors">Ethical Sourcing & Sustainability</a></li>
+                    <li><a href="#" class="hover:text-champagne transition-colors">Accessibility Compliance</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 md:px-12 pt-8 border-t border-stone-900 flex flex-col sm:flex-row justify-between items-center text-stone-600 text-[10px] tracking-widest">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-stone-900 flex flex-col sm:flex-row justify-between items-center text-stone-600 text-[10px] tracking-widest">
             <p>© 2026 MAISON D'ÉLITE. ALL RIGHTS RESERVED.</p>
+            <p class="mt-2 sm:mt-0">DESIGNED FOR EXCELLENCE & LUXURY</p>
         </div>
     </footer>
 
-    <!-- Shopping Cart Drawer -->
-    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none opacity-0 transition-opacity duration-300">
-        <div id="cart-backdrop" class="absolute inset-0 bg-obsidian/80 backdrop-blur-sm pointer-events-auto"></div>
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0">
+        <!-- Backdrop -->
+        <div id="cart-backdrop" class="absolute inset-0 bg-obsidian/80 backdrop-blur-sm transition-opacity"></div>
 
-        <div class="fixed inset-y-0 right-0 max-w-full flex pl-6 pointer-events-auto">
-            <div id="cart-content" class="w-screen max-w-md bg-warmGrey border-l border-champagne/20 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10 pointer-events-none">
+            <div id="cart-content" class="pointer-events-auto w-screen max-w-md bg-warmGrey border-l border-champagne/20 shadow-2xl transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col justify-between">
                 
+                <!-- Drawer Header -->
                 <div class="p-6 border-b border-stone-800 flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-bag-shopping text-champagne"></i>
                         <span class="font-serif text-lg tracking-widest text-ivory">YOUR SHOPPING BAG</span>
                     </div>
-                    <button id="close-cart-btn" type="button" class="text-stone-400 hover:text-champagne text-xl p-2">
+                    <button id="close-cart-btn" class="text-stone-400 hover:text-champagne text-xl">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
-                    <!-- Cart items generated by JS -->
+                <!-- Drawer Items Container -->
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+                    <!-- Items rendered via JavaScript -->
                 </div>
 
+                <!-- Drawer Footer & Checkout -->
                 <div class="p-6 border-t border-stone-800 bg-obsidian">
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-xs uppercase tracking-widest text-stone-400">Subtotal</span>
                         <span id="cart-subtotal" class="font-serif text-xl text-champagne font-light">$0</span>
                     </div>
-                    <button id="checkout-btn" type="button" class="w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors">
+                    <p class="text-[10px] text-stone-500 mb-6 italic">Delivery and payment are confirmed with you on WhatsApp after you place your order.</p>
+                    <button id="checkout-btn" class="w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors">
                         Proceed To VIP Checkout
                     </button>
                 </div>
@@ -528,26 +592,24 @@
         </div>
     </div>
 
-    <!-- Product Quick View Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="modal-backdrop" class="absolute inset-0 bg-obsidian/90 backdrop-blur-md"></div>
         
         <div class="relative bg-warmGrey border border-champagne/30 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto z-10 p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300">
-            <button id="close-modal-btn" type="button" class="absolute top-4 right-4 text-stone-400 hover:text-champagne text-2xl z-20 p-2">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-stone-400 hover:text-champagne text-2xl z-20">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div id="modal-body" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Modal content dynamically injected -->
+            <div id="modal-body" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Injected by JavaScript -->
             </div>
         </div>
     </div>
 
-    <!-- VIP Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="checkout-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="checkout-backdrop" class="absolute inset-0 bg-obsidian/90 backdrop-blur-md"></div>
         <div class="relative bg-warmGrey border border-champagne/30 rounded-lg max-w-4xl w-full max-h-[92vh] overflow-y-auto z-10 p-6 md:p-8 shadow-2xl">
-            <button id="close-checkout-btn" type="button" class="absolute top-4 right-4 text-stone-400 hover:text-champagne text-2xl z-20 p-2">
+            <button id="close-checkout-btn" class="absolute top-4 right-4 text-stone-400 hover:text-champagne text-2xl z-20" aria-label="Close checkout">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -558,40 +620,46 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
                     <form id="checkout-form" class="md:col-span-3 space-y-4">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Full Name *</label>
-                            <input name="name" type="text" required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Full Name *</label>
+                            <input name="name" type="text" required autocomplete="name" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Phone / WhatsApp *</label>
-                                <input name="phone" type="tel" required placeholder="+234 ..." class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Phone / WhatsApp *</label>
+                                <input name="phone" type="tel" required autocomplete="tel" placeholder="+234 ..." class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Email</label>
-                                <input name="email" type="email" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Email (optional)</label>
+                                <input name="email" type="email" autocomplete="email" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Delivery Address *</label>
-                            <input name="address" type="text" required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Delivery Address *</label>
+                            <input name="address" type="text" required autocomplete="street-address" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">City *</label>
-                                <input name="city" type="text" required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">City *</label>
+                                <input name="city" type="text" required autocomplete="address-level2" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">State *</label>
-                                <input name="state" type="text" required class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">State / Region *</label>
+                                <input name="state" type="text" required autocomplete="address-level1" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Country *</label>
-                                <input name="country" type="text" required value="Nigeria" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Country *</label>
+                                <input name="country" type="text" required autocomplete="country-name" value="Nigeria" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors">
                             </div>
                         </div>
-                        <button type="submit" class="w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors mt-2">
-                            Place Order on WhatsApp
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2">Order Notes (sizes, colours, gift message)</label>
+                            <textarea name="notes" rows="3" class="w-full bg-obsidian border border-stone-800 rounded px-4 py-3 text-xs text-ivory focus:border-champagne focus:outline-none transition-colors"></textarea>
+                        </div>
+                        <p id="checkout-error" class="hidden text-xs text-red-400"></p>
+                        <button type="submit" class="w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors">
+                            <i class="fa-brands fa-whatsapp mr-2"></i> Place Order on WhatsApp
                         </button>
+                        <p class="text-[10px] text-stone-500 italic">Your order opens in WhatsApp, ready to send. We confirm availability, delivery fee and payment details with you there.</p>
                     </form>
 
                     <aside class="md:col-span-2 bg-obsidian/60 border border-stone-800 rounded p-5 h-fit">
@@ -601,39 +669,52 @@
                             <span class="text-[10px] uppercase tracking-widest text-stone-400">Subtotal</span>
                             <span id="checkout-total" class="font-serif text-xl text-champagne"></span>
                         </div>
+                        <p class="text-[10px] text-stone-500 mt-2 italic">Delivery fee confirmed on WhatsApp.</p>
                     </aside>
                 </div>
             </div>
 
             <div id="checkout-done-view" class="hidden text-center py-10 max-w-md mx-auto">
                 <i class="fa-solid fa-circle-check text-4xl text-champagne mb-4"></i>
-                <h2 class="font-serif text-2xl font-light mb-2">Order Ready To Send</h2>
+                <h2 class="font-serif text-2xl md:text-3xl font-light mb-2">Your order is ready to send</h2>
+                <p class="text-stone-400 text-xs mb-1">Order reference</p>
                 <p id="done-ref" class="font-serif text-xl text-champagne mb-5"></p>
+                <p class="text-stone-300 text-sm font-serif italic mb-6">WhatsApp should have opened with your order. Tap <strong>Send</strong> in WhatsApp to complete it. If it didn't open, use the button below.</p>
                 <a id="done-wa-link" href="#" target="_blank" rel="noopener" class="inline-block w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors">
-                    Open WhatsApp
+                    <i class="fa-brands fa-whatsapp mr-2"></i> Open WhatsApp
                 </a>
-                <button id="done-close-btn" type="button" class="mt-4 text-xs uppercase tracking-widest text-stone-400 hover:text-champagne block w-full">Continue Shopping</button>
+                <button id="done-close-btn" class="mt-4 text-xs uppercase tracking-widest text-stone-400 hover:text-champagne">Continue Shopping</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-[70] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="glass-dark border border-champagne/40 px-6 py-4 rounded-md shadow-2xl flex items-center gap-3">
             <i class="fa-solid fa-circle-check text-champagne"></i>
-            <span id="toast-message" class="text-xs tracking-wider text-ivory">Item added.</span>
+            <span id="toast-message" class="text-xs tracking-wider text-ivory">Item added to your selection.</span>
         </div>
     </div>
 
     <script>
+        // =====================================================
+        //  STORE SETTINGS  — edit these before you go live
+        // =====================================================
         const STORE = {
             brand: "MAISON D'ÉLITE",
-            whatsapp: "2348062785180",
-            currencySymbol: "$",
-            locale: "en-US"
+            whatsapp: "2349134891482",   // international format, digits only, no + (e.g. 2348012345678)
+            currencySymbol: "$",         // e.g. "₦" for naira
+            locale: "en-US"              // e.g. "en-NG"
         };
         const fmt = (n) => STORE.currencySymbol + Number(n).toLocaleString(STORE.locale);
+        const whatsappReady = () => /^\d{10,15}$/.test(STORE.whatsapp);
+        const waLink = (text) => `https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`;
 
+        // Elegant placeholder if any product image fails to load
+        const PLACEHOLDER = "data:image/svg+xml;utf8," + encodeURIComponent(
+            `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='600' height='800' fill='#1c1b1a'/><rect x='24' y='24' width='552' height='752' fill='none' stroke='#D4AF37' stroke-opacity='.35'/><text x='300' y='410' text-anchor='middle' font-family='Georgia,serif' font-size='64' fill='#D4AF37'>M</text><text x='300' y='450' text-anchor='middle' font-family='Georgia,serif' font-size='16' letter-spacing='6' fill='#a8a29e'>MAISON D'ÉLITE</text></svg>`);
+        window.imgFallback = function(el) { el.onerror = null; el.src = PLACEHOLDER; };
+
+        // --- DATA LAYER ---
         const productsData = [
             {
                 id: 1,
@@ -643,7 +724,7 @@
                 image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800&auto=format&fit=crop",
                 badge: "Haute Couture",
                 desc: "Sculpted floor-length coat gown tailored in black double-faced silk crepe with satin lapels.",
-                details: ["100% Italian Silk Crepe", "Hand-stitched silk lining", "Bespoke tailor measurement", "Made in Paris Atelier"]
+                details: ["100% Italian Silk Crepe", "Hand-stitched silk lining", "Bespoke tailor measurement included", "Made in Paris Atelier"]
             },
             {
                 id: 2,
@@ -653,7 +734,7 @@
                 image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
                 badge: "Limited Edition",
                 desc: "Hand-finished calfskin leather tote featuring 24-karat gold-plated champagne hardware.",
-                details: ["Full-grain French calfskin", "24K Gold-plated hardware", "Includes custom luggage tag"]
+                details: ["Full-grain French calfskin", "24K Gold-plated hardware", "Includes custom luggage tag", "Serial numbered piece"]
             },
             {
                 id: 3,
@@ -663,7 +744,7 @@
                 image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=800&auto=format&fit=crop",
                 badge: "Winter Runway",
                 desc: "Over-structured shoulders with a dramatic flared waist hem, crafted in heavy melton wool.",
-                details: ["100% Virgin Wool", "Horn buttons", "Satin storm flap"]
+                details: ["100% Virgin Wool", "Horn buttons", "Satin storm flap", "Dry clean only"]
             },
             {
                 id: 4,
@@ -673,7 +754,7 @@
                 image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop",
                 badge: "Fine Jewelry",
                 desc: "18k yellow gold drops inset with conflict-free black onyx discs and brilliant-cut white diamonds.",
-                details: ["18k Solid Yellow Gold", "Natural Black Onyx", "0.85ct White Diamonds"]
+                details: ["18k Solid Yellow Gold", "Natural Black Onyx", "0.85ct White Diamonds", "Certificate of Authenticity"]
             },
             {
                 id: 5,
@@ -683,7 +764,7 @@
                 image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop",
                 badge: "Ready-To-Wear",
                 desc: "Deep obsidian silk velvet jacket with understated champagne embroidery on cuff trims.",
-                details: ["Silk-velvet blend", "Hand-embroidered cuffs", "Tailored fit"]
+                details: ["Silk-velvet blend", "Hand-embroidered cuffs", "Bespoke buttons", "Tailored fit"]
             },
             {
                 id: 6,
@@ -693,15 +774,209 @@
                 image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop",
                 badge: "Haute Horlogerie",
                 desc: "Automatic Swiss mechanical movement set in a slender rose-gold case with alligator strap.",
-                details: ["Swiss Made Movement", "18k Rose Gold Case", "Genuine Alligator Strap"]
+                details: ["Swiss Made Movement", "18k Rose Gold Case", "Genuine Alligator Strap", "50m Water Resistance"]
+            },
+            {
+                id: 7,
+                name: "Aurelia Draped Evening Dress",
+                category: "couture",
+                price: 9800,
+                image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=800&auto=format&fit=crop",
+                badge: "Haute Couture",
+                desc: "Fluid one-shoulder column dress in hand-pleated silk satin with a sculpted open back.",
+                details: ["Hand-pleated silk satin","Hidden corset boning","Made to your measurements","Delivered in a garment trunk"]
+            },
+            {
+                id: 8,
+                name: "Sovereign Peak-Lapel Suit",
+                category: "rtw",
+                price: 5200,
+                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800&auto=format&fit=crop",
+                badge: "Tailored",
+                desc: "Two-piece suit in fine Super 150s wool with a sharp peak lapel and half-canvas construction.",
+                details: ["Super 150s Merino wool","Half-canvas construction","Working cuff buttons","Complimentary first alteration"]
+            },
+            {
+                id: 9,
+                name: "Cashmere Cloud Knit Sweater",
+                category: "rtw",
+                price: 1650,
+                image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=800&auto=format&fit=crop",
+                badge: "Ready-To-Wear",
+                desc: "Featherweight oversized sweater knitted from two-ply Mongolian cashmere.",
+                details: ["100% Mongolian cashmere","Ribbed trims","Relaxed oversized fit","Hand wash or dry clean"]
+            },
+            {
+                id: 10,
+                name: "Noir Leather Moto Jacket",
+                category: "rtw",
+                price: 3200,
+                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800&auto=format&fit=crop",
+                badge: "Signature",
+                desc: "Buttery lambskin moto jacket with gold-tone zips and a quilted satin lining.",
+                details: ["Lambskin leather","Gold-tone YKK zips","Quilted satin lining","Slim tailored fit"]
+            },
+            {
+                id: 11,
+                name: "Silk Charmeuse Wrap Blouse",
+                category: "rtw",
+                price: 1400,
+                image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop",
+                badge: "New Season",
+                desc: "Wrap-front blouse in washed silk charmeuse with a self-tie waist and mother-of-pearl buttons.",
+                details: ["100% silk charmeuse","Mother-of-pearl buttons","Self-tie waist","Dry clean recommended"]
+            },
+            {
+                id: 12,
+                name: "Duchesse Structured Handbag",
+                category: "bags",
+                price: 4600,
+                image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
+                badge: "Iconic",
+                desc: "Top-handle structured handbag in smooth calfskin with a suede-lined interior and detachable strap.",
+                details: ["Smooth French calfskin","Suede-lined interior","Detachable shoulder strap","Dust bag included"]
+            },
+            {
+                id: 13,
+                name: "Soirée Gold Chain Clutch",
+                category: "bags",
+                price: 2100,
+                image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
+                badge: "Evening",
+                desc: "Compact envelope clutch in black grained leather with a gold chain strap.",
+                details: ["Grained leather","Gold-plated chain","Magnetic closure","Fits phone and cards"]
+            },
+            {
+                id: 14,
+                name: "Voyageur Weekender Bag",
+                category: "bags",
+                price: 5800,
+                image: "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=800&auto=format&fit=crop",
+                badge: "Travel",
+                desc: "Generous leather weekender with a reinforced base, brass feet and a luggage-tag keyring.",
+                details: ["Full-grain leather","Brass feet and hardware","Padded top handles","Detachable shoulder strap"]
+            },
+            {
+                id: 15,
+                name: "Perle Royale Pearl Necklace",
+                category: "jewelry",
+                price: 6200,
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop",
+                badge: "Fine Jewelry",
+                desc: "Hand-knotted strand of lustrous freshwater pearls with an 18k gold clasp.",
+                details: ["Hand-knotted on silk","AAA freshwater pearls","18k gold clasp","Certificate of Authenticity"]
+            },
+            {
+                id: 16,
+                name: "Étoile Pavé Diamond Ring",
+                category: "jewelry",
+                price: 11800,
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop",
+                badge: "Fine Jewelry",
+                desc: "Platinum band set with a pavé of brilliant-cut diamonds around a central solitaire.",
+                details: ["Platinum 950","1.20ct total diamond weight","Ethically sourced stones","Complimentary resizing"]
+            },
+            {
+                id: 17,
+                name: "Cléo Gold Cuff Bracelet",
+                category: "jewelry",
+                price: 3900,
+                image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=800&auto=format&fit=crop",
+                badge: "Statement",
+                desc: "Sculpted 18k gold-vermeil cuff with a hand-polished finish and an open back for easy wear.",
+                details: ["18k gold vermeil","Hand-polished finish","Adjustable open back","Presented in a velvet box"]
+            },
+            {
+                id: 18,
+                name: "Lumière Layered Gold Necklace",
+                category: "jewelry",
+                price: 2400,
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop",
+                badge: "Everyday Luxe",
+                desc: "Three delicate gold chains of graduated length joined by a single pendant clasp.",
+                details: ["14k gold-filled chains","Graduated lengths","Lobster clasp","Hypoallergenic"]
+            },
+            {
+                id: 19,
+                name: "Argent Chronograph Timepiece",
+                category: "watches",
+                price: 18500,
+                image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=800&auto=format&fit=crop",
+                badge: "Haute Horlogerie",
+                desc: "Stainless steel chronograph with a sunray dial, sapphire crystal and a leather strap.",
+                details: ["Automatic movement","Sapphire crystal","Steel case","100m water resistance"]
+            },
+            {
+                id: 20,
+                name: "Classique Gold Dress Watch",
+                category: "watches",
+                price: 14200,
+                image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=800&auto=format&fit=crop",
+                badge: "Heritage",
+                desc: "Slim dress watch with a champagne dial and gold-tone case on a refined leather strap.",
+                details: ["Slim 8mm case","Champagne sunray dial","Gold-tone case","Interchangeable strap"]
+            },
+            {
+                id: 21,
+                name: "Stiletto Satin Evening Pump",
+                category: "footwear",
+                price: 1450,
+                image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop",
+                badge: "Evening",
+                desc: "Pointed-toe pump in satin with a 90mm sculpted heel and padded leather insole.",
+                details: ["Satin upper","90mm heel","Leather sole and insole","Made in Italy"]
+            },
+            {
+                id: 22,
+                name: "Heritage Leather Loafer",
+                category: "footwear",
+                price: 1250,
+                image: "https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=800&auto=format&fit=crop",
+                badge: "Classic",
+                desc: "Hand-stitched calf leather loafer with a flexible leather sole and a cushioned footbed.",
+                details: ["Calf leather","Hand-stitched apron","Cushioned footbed","Resoleable"]
             }
         ];
 
-        let cart = [];
-        let wishlist = [];
+        const editorialSlides = [
+            {
+                title: "Look 04: The Nocturne Velvet Cape",
+                tag: "Paris Fashion Week 2026",
+                image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
+                desc: "Structured shoulder line paired with flowing train. Hand-embroidered with micro glass beads requiring 240 hours of artisanal labor in Paris."
+            },
+            {
+                title: "Look 12: Architectural Gold Silk Gown",
+                tag: "Milan Couture Week",
+                image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop",
+                desc: "Hand-pleated metallic gold silk lamé draped into a asymmetric fluid column silhouette."
+            },
+            {
+                title: "Look 21: The Tailored Obsidian Suit",
+                tag: "Bespoke Runway",
+                image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200&auto=format&fit=crop",
+                desc: "Sharp peak lapel tuxedo jacket combined with wide-leg fluid trousers and leather gloves."
+            }
+        ];
 
-        // DOM elements
+        // --- STATE MANAGEMENT ---
+        let cart = [];
+        try {
+            const saved = JSON.parse(localStorage.getItem('maison_cart') || '[]');
+            cart = saved.map(s => {
+                const p = productsData.find(x => x.id === s.id);
+                return p ? { ...p, quantity: s.quantity } : null;
+            }).filter(Boolean);
+        } catch (e) { cart = []; }
+        const saveCart = () => {
+            try { localStorage.setItem('maison_cart', JSON.stringify(cart.map(i => ({ id: i.id, quantity: i.quantity })))); } catch (e) {}
+        };
+        let wishlist = [];
+        let currentSlide = 0;
+
+        // --- DOM ELEMENTS ---
         const productsGrid = document.getElementById('products-grid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
         const cartDrawer = document.getElementById('cart-drawer');
         const cartContent = document.getElementById('cart-content');
         const cartBackdrop = document.getElementById('cart-backdrop');
@@ -710,40 +985,111 @@
         const cartItemsContainer = document.getElementById('cart-items-container');
         const cartSubtotal = document.getElementById('cart-subtotal');
         const cartBadge = document.getElementById('cart-badge');
+        const wishlistBadge = document.getElementById('wishlist-badge');
+        const wishlistBtn = document.getElementById('wishlist-btn');
+        
+        // Modal elements
+        const productModal = document.getElementById('product-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalBody = document.getElementById('modal-body');
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
 
         function renderProducts(category = 'all') {
             productsGrid.innerHTML = '';
-            const filtered = category === 'all' ? productsData : productsData.filter(p => p.category === category);
+            
+            const filtered = category === 'all' 
+                ? productsData 
+                : productsData.filter(p => p.category === category);
 
             filtered.forEach(product => {
+                const isWishlisted = wishlist.includes(product.id);
                 const card = document.createElement('div');
-                card.className = "group relative flex flex-col bg-warmGrey/40 rounded-sm border border-stone-800 overflow-hidden";
+                card.className = "group relative flex flex-col bg-warmGrey/40 rounded-sm border border-stone-800/80 overflow-hidden hover:border-champagne/40 transition-all duration-500";
                 
                 card.innerHTML = `
-                    <div class="relative aspect-[3/4] bg-obsidian cursor-pointer overflow-hidden" onclick="openProductModal(${product.id})">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 text-[9px] uppercase tracking-widest bg-obsidian/80 text-champagne px-2 py-1 backdrop-blur-md rounded-xs border border-champagne/20">
+                    <div class="relative img-hover-zoom aspect-[3/4] bg-obsidian cursor-pointer overflow-hidden" onclick="openProductModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="imgFallback(this)" class="w-full h-full object-cover">
+                        <span class="absolute top-4 left-4 text-[9px] uppercase tracking-widest bg-obsidian/80 text-champagne px-3 py-1 backdrop-blur-md rounded-xs border border-champagne/20">
                             ${product.badge}
                         </span>
+                        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute top-4 right-4 w-9 h-9 rounded-full glass-dark flex items-center justify-center text-ivory hover:text-champagne transition-colors">
+                            <i class="${isWishlisted ? 'fa-solid text-champagne' : 'fa-regular'} fa-heart"></i>
+                        </button>
                     </div>
 
-                    <div class="p-4 sm:p-6 flex flex-col flex-1 justify-between">
+                    <div class="p-6 flex flex-col flex-1 justify-between">
                         <div>
-                            <h3 class="font-serif text-base sm:text-lg font-normal text-ivory mb-1">${product.name}</h3>
-                            <p class="text-stone-400 text-xs line-clamp-2 mb-4">${product.desc}</p>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-serif text-lg font-normal text-ivory group-hover:text-champagne transition-colors">${product.name}</h3>
+                            </div>
+                            <p class="text-stone-400 text-xs line-clamp-2 mb-4 font-light">${product.desc}</p>
                         </div>
 
-                        <div class="flex items-center justify-between pt-4 border-t border-stone-800">
-                            <span class="font-serif text-base sm:text-lg text-champagne">${fmt(product.price)}</span>
-                            <button type="button" onclick="addToCart(${product.id})" class="px-3 py-2 text-[10px] uppercase tracking-widest bg-champagne text-obsidian font-bold hover:bg-ivory transition-colors">
-                                Acquire
-                            </button>
+                        <div class="flex items-center justify-between pt-4 border-t border-stone-800/60">
+                            <span class="font-serif text-lg text-champagne font-light">${fmt(product.price)}</span>
+                            <div class="flex gap-2">
+                                <button onclick="openProductModal(${product.id})" class="cursor-pointer px-3 py-2 text-[10px] uppercase tracking-widest text-stone-300 border border-stone-700 hover:border-champagne hover:text-champagne active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-champagneLight transition-all">
+                                    Details
+                                </button>
+                                <button onclick="addToCart(${product.id})" class="cursor-pointer px-4 py-2 text-[10px] uppercase tracking-widest bg-champagne text-obsidian font-semibold hover:bg-ivory hover:shadow-[0_0_14px_rgba(212,175,55,0.45)] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-champagneLight transition-all">
+                                    Acquire
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
                 productsGrid.appendChild(card);
             });
+        }
+
+        window.openProductModal = function(id) {
+            const product = productsData.find(p => p.id === id);
+            if (!product) return;
+
+            modalBody.innerHTML = `
+                <div class="img-hover-zoom rounded overflow-hidden aspect-[3/4] bg-obsidian">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="imgFallback(this)" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-champagne">${product.badge}</span>
+                        <h2 class="font-serif text-2xl md:text-3xl font-light text-ivory mt-1 mb-3">${product.name}</h2>
+                        <p class="text-stone-300 font-serif text-sm italic mb-6 leading-relaxed">${product.desc}</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <h4 class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Craftsmanship Details</h4>
+                            <ul class="space-y-2">
+                                ${product.details.map(d => `<li class="text-xs text-stone-300 flex items-center gap-2"><i class="fa-solid fa-check text-[10px] text-champagne"></i> ${d}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-6 pt-4 border-t border-stone-800">
+                            <span class="text-xs uppercase tracking-widest text-stone-400">Price</span>
+                            <span class="font-serif text-2xl text-champagne font-light">${fmt(product.price)}</span>
+                        </div>
+                        <button onclick="addToCart(${product.id}); closeModal();" class="w-full py-4 bg-champagne text-obsidian text-xs tracking-widest2x uppercase font-bold hover:bg-ivory transition-colors">
+                            Add To Shopping Bag
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            productModal.classList.remove('opacity-0', 'pointer-events-none');
+            productModal.querySelector('div:nth-child(2)').classList.remove('scale-95');
+            productModal.querySelector('div:nth-child(2)').classList.add('scale-100');
+        };
+
+        function closeModal() {
+            productModal.classList.add('opacity-0', 'pointer-events-none');
+            productModal.querySelector('div:nth-child(2)').classList.remove('scale-100');
+            productModal.querySelector('div:nth-child(2)').classList.add('scale-95');
         }
 
         window.addToCart = function(id) {
@@ -758,11 +1104,42 @@
             }
 
             updateCartUI();
-            showToast(`Added to bag.`);
+            showToast(`Added "${product.name}" to your bag.`);
             openCart();
         };
 
+        window.removeFromCart = function(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        };
+
+        window.updateQuantity = function(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    updateCartUI();
+                }
+            }
+        };
+
+        window.toggleWishlist = function(id) {
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(item => item !== id);
+                showToast("Removed from Wishlist");
+            } else {
+                wishlist.push(id);
+                showToast("Added to Wishlist");
+            }
+            wishlistBadge.textContent = wishlist.length;
+            wishlistBadge.classList.toggle('hidden', wishlist.length === 0);
+            renderProducts();
+        };
+
         function updateCartUI() {
+            saveCart();
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             cartBadge.textContent = totalItems;
 
@@ -770,16 +1147,26 @@
             cartSubtotal.textContent = fmt(subtotal);
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `<p class="text-stone-500 font-serif italic text-center py-8 text-sm">Shopping bag is empty.</p>`;
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-16 text-stone-500 font-serif">
+                        <i class="fa-solid fa-bag-shopping text-3xl mb-3 text-stone-700"></i>
+                        <p class="italic text-sm">Your shopping bag is currently empty.</p>
+                    </div>
+                `;
             } else {
                 cartItemsContainer.innerHTML = cart.map(item => `
-                    <div class="flex gap-4 items-center pb-3 border-b border-stone-800">
-                        <img src="${item.image}" alt="" class="w-12 h-16 object-cover">
+                    <div class="flex gap-4 items-center pb-4 border-b border-stone-800">
+                        <img src="${item.image}" alt="${item.name}" onerror="imgFallback(this)" class="w-16 h-20 object-cover rounded-xs">
                         <div class="flex-1">
-                            <h4 class="font-serif text-xs text-ivory">${item.name}</h4>
+                            <h4 class="font-serif text-sm text-ivory">${item.name}</h4>
                             <span class="text-xs text-champagne font-serif">${fmt(item.price)}</span>
+                            <div class="flex items-center gap-3 mt-2">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="text-xs text-stone-400 hover:text-champagne px-2 border border-stone-800">-</button>
+                                <span class="text-xs text-ivory">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="text-xs text-stone-400 hover:text-champagne px-2 border border-stone-800">+</button>
+                            </div>
                         </div>
-                        <button type="button" onclick="removeFromCart(${item.id})" class="text-stone-500 hover:text-red-400 text-xs p-2">
+                        <button onclick="removeFromCart(${item.id})" class="text-stone-500 hover:text-red-400 text-xs">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -787,132 +1174,217 @@
             }
         }
 
-        window.removeFromCart = function(id) {
-            cart = cart.filter(i => i.id !== id);
-            updateCartUI();
-        };
-
+        let cartCloseTimer = null;
         function openCart() {
+            clearTimeout(cartCloseTimer);
             cartDrawer.classList.remove('opacity-0', 'pointer-events-none');
             cartContent.classList.remove('translate-x-full');
         }
 
         function closeCart() {
             cartContent.classList.add('translate-x-full');
-            setTimeout(() => {
+            cartCloseTimer = setTimeout(() => {
                 cartDrawer.classList.add('opacity-0', 'pointer-events-none');
             }, 300);
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            toast.classList.remove('opacity-0', 'translate-y-20');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-20');
-            }, 3000);
+        // ---------- CHECKOUT ----------
+        const checkoutModal = document.getElementById('checkout-modal');
+
+        function openCheckout() {
+            const summary = document.getElementById('checkout-summary');
+            summary.innerHTML = cart.map(i => `
+                <div class="flex items-center gap-3">
+                    <img src="${i.image}" alt="" onerror="imgFallback(this)" class="w-10 h-12 object-cover rounded-sm">
+                    <div class="flex-1">
+                        <p class="text-ivory font-serif text-sm leading-snug">${i.name}</p>
+                        <p class="text-stone-500">Qty ${i.quantity}</p>
+                    </div>
+                    <span class="text-champagne font-serif">${fmt(i.price * i.quantity)}</span>
+                </div>`).join('');
+            document.getElementById('checkout-total').textContent = fmt(cart.reduce((s, i) => s + i.price * i.quantity, 0));
+            document.getElementById('checkout-error').classList.add('hidden');
+            document.getElementById('checkout-form-view').classList.remove('hidden');
+            document.getElementById('checkout-done-view').classList.add('hidden');
+            checkoutModal.classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        window.openProductModal = function(id) {
-            const product = productsData.find(p => p.id === id);
-            if (!product) return;
+        function closeCheckout() {
+            checkoutModal.classList.add('opacity-0', 'pointer-events-none');
+        }
 
-            document.getElementById('modal-body').innerHTML = `
-                <div class="aspect-[3/4] bg-obsidian rounded overflow-hidden">
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <span class="text-[10px] uppercase tracking-widest text-champagne">${product.badge}</span>
-                        <h2 class="font-serif text-2xl font-light text-ivory mt-1 mb-2">${product.name}</h2>
-                        <p class="text-stone-300 font-serif text-xs italic mb-4">${product.desc}</p>
-                    </div>
-                    <div>
-                        <span class="font-serif text-xl text-champagne block mb-4">${fmt(product.price)}</span>
-                        <button type="button" onclick="addToCart(${product.id}); closeModal();" class="w-full py-3 bg-champagne text-obsidian text-xs uppercase font-bold">
-                            Add To Bag
-                        </button>
-                    </div>
-                </div>
-            `;
-            const modal = document.getElementById('product-modal');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-        };
+        function submitOrder(e) {
+            e.preventDefault();
+            const err = document.getElementById('checkout-error');
+            if (cart.length === 0) { closeCheckout(); showToast("Your shopping bag is empty."); return; }
+            if (!whatsappReady()) {
+                err.textContent = "This store's WhatsApp number isn't set up yet. Please contact the store directly.";
+                err.classList.remove('hidden');
+                return;
+            }
+            const d = Object.fromEntries(new FormData(e.target).entries());
+            const ref = 'ME-' + Date.now().toString(36).toUpperCase().slice(-6);
+            const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+            const lines = cart.map((i, n) => `${n + 1}. ${i.name} x${i.quantity} — ${fmt(i.price * i.quantity)}`);
+            const msg = [
+                `*New Order — ${STORE.brand}*`,
+                `Ref: ${ref}`,
+                ``,
+                `*Items*`,
+                ...lines,
+                ``,
+                `*Subtotal:* ${fmt(total)}`,
+                `(Delivery fee to be confirmed)`,
+                ``,
+                `*Customer*`,
+                `Name: ${d.name}`,
+                `Phone: ${d.phone}`,
+                `Email: ${d.email || '-'}`,
+                `Address: ${d.address}, ${d.city}, ${d.state}, ${d.country}`,
+                `Notes: ${d.notes || '-'}`
+            ].join('\n');
 
-        function closeModal() {
-            document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
+            const link = waLink(msg);
+            document.getElementById('done-ref').textContent = ref;
+            document.getElementById('done-wa-link').href = link;
+            document.getElementById('checkout-form-view').classList.add('hidden');
+            document.getElementById('checkout-done-view').classList.remove('hidden');
+            window.open(link, '_blank', 'noopener');
+
+            cart = [];
+            updateCartUI();
+            e.target.reset();
+            e.target.elements.country.value = 'Nigeria';
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = msg;
+            toast.classList.remove('opacity-0', 'translate-y-20');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-20');
+            }, 3500);
+        }
+
+        function updateRunwaySlide(index) {
+            currentSlide = index;
+            const slide = editorialSlides[currentSlide];
+            
+            document.getElementById('runway-img').src = slide.image;
+            document.getElementById('runway-title').textContent = slide.title;
+            document.getElementById('runway-tag').textContent = slide.tag;
+            document.getElementById('runway-desc').textContent = slide.desc;
+            document.getElementById('slide-current').textContent = `0${currentSlide + 1}`;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
+            updateCartUI();
 
-            // Category Filter Events
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('bg-champagne', 'text-obsidian');
+            // Filter button events
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-champagne', 'text-obsidian', 'border-champagne');
                         b.classList.add('border-stone-800', 'text-stone-300');
                     });
-                    e.currentTarget.classList.add('bg-champagne', 'text-obsidian');
-                    renderProducts(e.currentTarget.dataset.category);
+                    btn.classList.add('bg-champagne', 'text-obsidian', 'border-champagne');
+                    btn.classList.remove('border-stone-800', 'text-stone-300');
+                    renderProducts(btn.dataset.category);
                 });
             });
 
-            // Cart Drawer
+            // Cart Drawer events
             bagBtn.addEventListener('click', openCart);
             closeCartBtn.addEventListener('click', closeCart);
             cartBackdrop.addEventListener('click', closeCart);
 
-            // Modal
-            document.getElementById('close-modal-btn').addEventListener('click', closeModal);
-            document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+            // Modal events
+            closeModalBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
 
-            // Mobile Menu
-            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            // Mobile menu events
+            mobileMenuBtn.addEventListener('click', () => {
                 mobileMenu.classList.remove('-translate-x-full');
             });
-            document.getElementById('close-mobile-menu').addEventListener('click', () => {
+            closeMobileMenu.addEventListener('click', () => {
                 mobileMenu.classList.add('-translate-x-full');
             });
-            document.querySelectorAll('.mobile-nav-link').forEach(l => {
-                l.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('-translate-x-full');
+                });
             });
 
-            // VIP Checkout
-            document.getElementById('checkout-btn').addEventListener('click', () => {
-                if(cart.length === 0) return showToast("Your bag is empty.");
-                closeCart();
-                document.getElementById('checkout-summary').innerHTML = cart.map(i => `
-                    <div class="flex justify-between">
-                        <span>${i.name} x${i.quantity}</span>
-                        <span class="text-champagne">${fmt(i.price * i.quantity)}</span>
-                    </div>
-                `).join('');
-                document.getElementById('checkout-total').textContent = fmt(cart.reduce((s,i) => s + (i.price*i.quantity), 0));
-                document.getElementById('checkout-modal').classList.remove('opacity-0', 'pointer-events-none');
+            // Editorial Slider events
+            document.getElementById('next-slide').addEventListener('click', () => {
+                const next = (currentSlide + 1) % editorialSlides.length;
+                updateRunwaySlide(next);
+            });
+            document.getElementById('prev-slide').addEventListener('click', () => {
+                const prev = (currentSlide - 1 + editorialSlides.length) % editorialSlides.length;
+                updateRunwaySlide(prev);
             });
 
-            document.getElementById('close-checkout-btn').addEventListener('click', () => {
-                document.getElementById('checkout-modal').classList.add('opacity-0', 'pointer-events-none');
-            });
-
-            document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            // Atelier Form submission handling
+            document.getElementById('atelier-form').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const d = Object.fromEntries(new FormData(e.target));
-                const total = cart.reduce((s,i) => s + (i.price*i.quantity), 0);
-                const text = `*New Order*\nName: ${d.name}\nPhone: ${d.phone}\nAddress: ${d.address}, ${d.city}\nTotal: ${fmt(total)}`;
-                const waUrl = `https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`;
-                
-                document.getElementById('done-wa-link').href = waUrl;
-                document.getElementById('checkout-form-view').classList.add('hidden');
-                document.getElementById('checkout-done-view').classList.remove('hidden');
-                window.open(waUrl, '_blank');
+                if (!whatsappReady()) { showToast("Set your WhatsApp number in STORE settings first."); return; }
+                // Field order: name, email, location, service, date, time, requests
+                const f = e.target.elements;
+                const sel = (el) => el.options[el.selectedIndex].text;
+                const msg = [
+                    `*Appointment Request — ${STORE.brand}*`,
+                    ``,
+                    `Name: ${f[0].value}`,
+                    `Email: ${f[1].value}`,
+                    `Location: ${sel(f[2])}`,
+                    `Service: ${sel(f[3])}`,
+                    `Date: ${f[4].value}`,
+                    `Time: ${sel(f[5])}`,
+                    `Requests: ${f[6].value || '-'}`
+                ].join('\n');
+                window.open(waLink(msg), '_blank', 'noopener');
+                showToast("Opening WhatsApp. Tap Send to submit your request.");
+                e.target.reset();
             });
 
-            document.getElementById('done-close-btn').addEventListener('click', () => {
-                document.getElementById('checkout-modal').classList.add('opacity-0', 'pointer-events-none');
-                cart = [];
-                updateCartUI();
+            // Newsletter Form submission
+            document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!whatsappReady()) { showToast("Set your WhatsApp number in STORE settings first."); return; }
+                const email = e.target.querySelector('input[type="email"]').value;
+                window.open(waLink(`Please add me to the ${STORE.brand} VIP list: ${email}`), '_blank', 'noopener');
+                showToast("Opening WhatsApp. Tap Send to join the list.");
+                e.target.reset();
+            });
+
+            // Checkout
+            document.getElementById('checkout-btn').addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showToast("Your shopping bag is empty.");
+                } else {
+                    closeCart();
+                    openCheckout();
+                }
+            });
+            document.getElementById('close-checkout-btn').addEventListener('click', closeCheckout);
+            document.getElementById('checkout-backdrop').addEventListener('click', closeCheckout);
+            document.getElementById('done-close-btn').addEventListener('click', closeCheckout);
+            document.getElementById('checkout-form').addEventListener('submit', submitOrder);
+
+            // Sticky Navbar Glass Effect on Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('top-2');
+                    navbar.classList.remove('top-8');
+                } else {
+                    navbar.classList.add('top-8');
+                    navbar.classList.remove('top-2');
+                }
             });
         });
     </script>
